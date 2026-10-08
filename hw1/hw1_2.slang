@@ -64,6 +64,36 @@ void compute_main(uint2 tid : SV_DispatchThreadID,
     {
         image[tid] = float4(fill_color, 1);
     }
+
+    // For loop for stroke color
+    for (int i = 0; i < num_polyline; i++) 
+    {
+
+        // declarations for variables
+        float L;
+        float qminq2;
+        float2 q2;
+        float2 pOne;
+        if (i == num_polyline - 1)
+            pOne = polyline[0];
+        else
+            pOne = polyline[i+1];
+
+        float2 pZero = polyline[i];
+        float p1minp0 = length(pOne - pZero);
+        float2 q = float2(tid);
+        q.y = height - q.y;
+    
+
+        // math for required values
+        L = dot(pOne - pZero, q - pZero) / p1minp0;
+        q2 = pZero + L * (pOne - pZero) / p1minp0; 
+        qminq2 = length(q - q2);
+
+        if (L > 0 && L < p1minp0 && qminq2 < stroke_width/2) {
+            image[tid] = float4(stroke_color, 1);
+        }
+    }
     
     
     /* pseudo:
