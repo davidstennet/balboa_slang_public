@@ -22,78 +22,97 @@ void compute_main(uint2 tid : SV_DispatchThreadID,
 
     uint x = tid.x;
     uint y = height - tid.y;
+    bool is_stroke_painted = false;
+    int is_closed_int = is_closed ? 0 : 1;
 
     // For loop for Fill Color
     int count = 0;
-    for (int i = 0; i < num_polyline; i++)
+    for (int i = 0; i < num_polyline - is_closed_int; i++)
     {
-        float t;
-        float s;
-        float qx = float(x);
-        float qy = float(y);
-        float pZeroX = polyline[i].x;
-        float pZeroY = polyline[i].y;
-        float pOneX;
-        float pOneY;
-        if (i == num_polyline - 1) {
-            pOneX = polyline[0].x;
-            pOneY = polyline[0].y;
-        }
-        else {
-            pOneX = polyline[i+1].x;
-            pOneY = polyline[i+1].y;
-        }
-        
-        t = ((qy - pZeroY) / (pOneY - pZeroY));
-        s = (t * (pOneX - pZeroX) + pZeroX - qx);
+        // Stroke color code
+        if (use_stroke_color) {
+            // declarations for variables
+            float L;
+            float qminq2;
+            
+            float2 q2;
+            float2 pOne;
 
-        if (s >= 0 && t >= 0 && t <= 1) 
-        {
-            if (pZeroY > pOneY && pZeroY != y)
-            {
-                count += 1;
+            if (i == num_polyline - 1)
+                pOne = polyline[0];
+            else
+                pOne = polyline[i + 1];
+
+            float2 pZero = polyline[i];
+            float p1minp0 = length(pOne - pZero);
+            float2 q = float2(tid);
+            q.y = height - q.y;
+
+            // variables for join
+            float radius = stroke_width / 2;
+            float distance = sqrt(pow(pOne.x - x, 2) + pow(pOne.y - y, 2));
+            bool last_line_is_open = !is_closed && i == num_polyline - 2 ? false : true;
+
+            // math for required values
+            L = dot(pOne - pZero, q - pZero) / p1minp0;
+            q2 = pZero + L * (pOne - pZero) / p1minp0;
+            qminq2 = length(q - q2);
+
+            if (L > 0 && L < p1minp0 && qminq2 < stroke_width / 2) {
+                image[tid] = float4(stroke_color, 1);
+                is_stroke_painted = true;
+                break;
             }
-            else if (pZeroY < pOneY && pOneY != y)
-            {
-                count -= 1;
+            else if (distance < radius && last_line_is_open) {
+                image[tid] = float4(stroke_color, 1);
+                is_stroke_painted = true;
+                break;
             }
+        }
+        // Fill color code
+        if (use_fill_color) {
+            float t;
+            float s;
+            float qx = float(x);
+            float qy = float(y);
+            float pZeroX = polyline[i].x;
+            float pZeroY = polyline[i].y;
+            float pOneX;
+            float pOneY;
+            if (i == num_polyline - 1) {
+                pOneX = polyline[0].x;
+                pOneY = polyline[0].y;
+            }
+            else {
+                pOneX = polyline[i + 1].x;
+                pOneY = polyline[i + 1].y;
+            }
+
+            t = ((qy - pZeroY) / (pOneY - pZeroY));
+            s = (t * (pOneX - pZeroX) + pZeroX - qx);
+
+            if (s >= 0 && t >= 0 && t <= 1)
+            {
+                if (pZeroY > pOneY && pZeroY != y)
+                {
+                    count += 1;
+                }
+                else if (pZeroY < pOneY && pOneY != y)
+                {
+                    count -= 1;
+                }
+            }
+
+            
         }
     }
 
-    if (count != 0 && use_fill_color)
+    // Paints the pixel the fill color if correct
+    if (count != 0 && !is_stroke_painted)
     {
         image[tid] = float4(fill_color, 1);
     }
 
-    // For loop for stroke color
-    for (int i = 0; i < num_polyline; i++) 
-    {
-
-        // declarations for variables
-        float L;
-        float qminq2;
-        float2 q2;
-        float2 pOne;
-        if (i == num_polyline - 1)
-            pOne = polyline[0];
-        else
-            pOne = polyline[i+1];
-
-        float2 pZero = polyline[i];
-        float p1minp0 = length(pOne - pZero);
-        float2 q = float2(tid);
-        q.y = height - q.y;
-    
-
-        // math for required values
-        L = dot(pOne - pZero, q - pZero) / p1minp0;
-        q2 = pZero + L * (pOne - pZero) / p1minp0; 
-        qminq2 = length(q - q2);
-
-        if (L > 0 && L < p1minp0 && qminq2 < stroke_width/2) {
-            image[tid] = float4(stroke_color, 1);
-        }
-    }
     
     
     /* pseudo:

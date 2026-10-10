@@ -190,8 +190,39 @@ def compose_transformation(transforms):
     F = np.eye(3, dtype=np.float32)
 
     for transform in transforms:
-        pass
-        # TODO: your code here
+        matrix = np.eye(3, dtype=np.float32)
+        if "scale" in transform:
+            values = transform["scale"]
+            matrix = np.array([[values[0],        0 , 0],
+                               [       0 , values[1], 0],
+                               [       0 ,        0 , 1]], dtype=np.float32)
+            
+        elif "shear_x" in transform:
+            values = transform["shear_x"]
+            matrix = np.array([[1, values[0], 0],
+                               [0,        1 , 0],
+                               [0,        0 , 1]], dtype=np.float32)
+            
+        elif "shear_y" in transform:
+            values = transform["shear_y"]
+            matrix = np.array([[       1 , 0, 0],
+                               [values[0], 1, 0],
+                               [       0 , 0, 1]], dtype=np.float32)
+            
+        elif "rotate" in transform:
+            values = transform["rotate"]
+            theta = np.radians(values[0])
+            matrix = np.array([[np.cos(theta), -np.sin(theta), 0],
+                               [np.sin(theta),  np.cos(theta), 0],
+                               [           0 ,             0 , 1]], dtype=np.float32)
+            
+        elif "translate" in transform:
+            values = transform["translate"]
+            matrix = np.array([[1, 0, values[0]],
+                               [0, 1, values[1]],
+                               [0, 0,        1 ]], dtype=np.float32)
+            
+        F = matrix @ F
 
     return F
 
