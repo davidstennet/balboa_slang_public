@@ -1,5 +1,110 @@
 import hw1_common;
 
+bool2 print_polyline(uint2 tid: SV_DispatchThreadID,
+                    uniform float2 pos,
+                    StructuredBuffer<float2> polyline,
+                    uniform int pts_offset,
+                    uniform uint height,
+                    uniform uint width,
+                    uniform int num_polyline,
+                    uniform bool is_closed,
+                    uniform bool use_fill_color,
+                    uniform float3 fill_color,
+                    uniform bool use_stroke_color,
+                    uniform float3 stroke_color,
+                    uniform float stroke_width,
+                    RWTexture2D<float4> image) {
+
+    float x = pos.x;
+    float y = pos.y;
+
+    bool is_inside_fill = false;
+    bool is_inside_stroke = false;
+
+    int is_closed_int = is_closed ? 0 : 1;
+
+    // For loop for Fill Color
+    int count = 0;
+    for (int i = 0; i < num_polyline - is_closed_int; i++)
+    {
+        // Stroke color code
+        if (use_stroke_color) {
+            // declarations for variables
+            float L;
+            float qminq2;
+
+            float2 q2;
+            float2 pOne;
+
+            if (i == num_polyline - 1)
+                pOne = polyline[pts_offset];
+            else
+                pOne = polyline[pts_offset + i + 1];
+
+            float2 pZero = polyline[pts_offset + i];
+            float p1minp0 = length(pOne - pZero);
+            float2 q = pos;
+
+            // variables for join
+            float radius = stroke_width / 2;
+            float distance = sqrt(pow(pOne.x - x, 2) + pow(pOne.y - y, 2));
+            bool last_line_is_open = !is_closed && i == num_polyline - 2 ? false : true;
+
+            // math for required values
+            L = dot(pOne - pZero, q - pZero) / p1minp0;
+            q2 = pZero + L * (pOne - pZero) / p1minp0;
+            qminq2 = length(q - q2);
+
+            if (L > 0 && L < p1minp0 && qminq2 < stroke_width / 2) {
+                is_inside_stroke = true;
+            }
+            else if (distance < radius && last_line_is_open) {
+                is_inside_stroke = true;
+            }
+        }
+        // Fill color code
+        if (use_fill_color) {
+            float t;
+            float s;
+            float qx = float(x);
+            float qy = float(y);
+            float pZeroX = polyline[pts_offset + i].x;
+            float pZeroY = polyline[pts_offset + i].y;
+            float pOneX;
+            float pOneY;
+            if (i == num_polyline - 1) {
+                pOneX = polyline[pts_offset].x;
+                pOneY = polyline[pts_offset].y;
+            }
+            else {
+                pOneX = polyline[pts_offset + i + 1].x;
+                pOneY = polyline[pts_offset + i + 1].y;
+            }
+
+            if (pOneY != pZeroY) {
+                t = ((qy - pZeroY) / (pOneY - pZeroY));
+                s = (t * (pOneX - pZeroX) + pZeroX - qx);
+
+                if (s >= 0 && t >= 0 && t <= 1)
+                {
+                    if (pZeroY > pOneY && pZeroY != y)
+                        count += 1;
+                    else if (pZeroY < pOneY && pOneY != y)
+                        count -= 1;
+                }
+            }
+        }
+    }
+
+    // Paints the pixel the fill color if correct
+    if (count != 0 && !is_inside_stroke)
+    {
+        is_inside_fill = true;
+    }
+
+    return bool2(is_inside_fill, is_inside_stroke);
+}
+
 [shader("compute")]
 [numthreads(8, 8, 1)]
 void compute_main(uint2 tid : SV_DispatchThreadID,
@@ -9,7 +114,7 @@ void compute_main(uint2 tid : SV_DispatchThreadID,
                   uniform int num_shapes,
                   StructuredBuffer<Circle> circles,
                   StructuredBuffer<Polyline> polylines,
-                  StructuredBuffer<QuadraticBezier> /*quadratic_beziers*/, // ignore for now
+                  StructuredBuffer<QuadraticBezier> quadratic_beziers, // ignore for now
                   StructuredBuffer<float2> points,
                   RWTexture2D<float4> image) {
     uint width, height;
@@ -18,142 +123,105 @@ void compute_main(uint2 tid : SV_DispatchThreadID,
         return;
     }
 
-    image[tid] = float4(1.0);
-    // TODO: your code here
-    
-    // Accumulate subpixel colors
-    float3 rgb_sum = float3(0.0);
+    //samples_per_axis = 1;
 
-    for (int a = 0; a < samples_per_axis; a++)
-    {
-        for (int b = 0; b < samples_per_axis; b++)
-        {
-            // Compute sample position
-            float2 sample_pos = float2(0.0, 0.0);
+    image[tid] = float4(background, 1.0);
 
-            sample_pos.x = tid.x + (a + 0.5) / samples_per_axis;
-            sample_pos.y = float(height) - (tid.y + (b + 0.5) / samples_per_axis);
+    float3 rgb_sum = float3(0, 0, 0);  
+
+    // The for loops a and b go through the sub pixels of pid
+    for (int a = 0; a < samples_per_axis; a++) {
+        for (int b = 0; b < samples_per_axis; b++) {
+
+            // X and Y here are computed as the center of a subpixel
+            float x = float(tid.x) + (b + 0.5) / samples_per_axis;
+            float y = float(height - 1 - tid.y) + (a + 0.5) / samples_per_axis;
+            float3 point_vec = float3(x, y, 1);
 
             float3 color = float3(0.0);
             float remaining = 1.0;
 
-            // Process shapes from front to back
             for (int i = 0; i < num_shapes; i++)
             {
-                Shape shape = shapes[i];
+                Shape currentShape = shapes[i];
+                float4 stroke_rgba = currentShape.stroke_rgba;
+                float4 fill_rgba = currentShape.fill_rgba;
 
+                float3 new_vec = mul(currentShape.world_to_obj, point_vec);
+                x = new_vec.x;
+                y = new_vec.y;
+
+                bool2 is_inside = bool2(false, false);
                 bool is_inside_stroke = false;
                 bool is_inside_fill = false;
 
-                // Convert to object coordinates
-                float3 sample_h = float3(sample_pos, 1.0);
-                float3 transformed_pos = mul(shape.world_to_obj, sample_h);
-                float2 object_pos = transformed_pos.xy;
-
-                // Circle detection
-                if (shape.type == 0)
+                
+                if (currentShape.type == ShapeType::Circle)
                 {
-                    Circle currentCircle = circles[shape.index];
+                    Circle currentCircle = circles[currentShape.index];
+                    float distance = sqrt(pow(currentCircle.center.x - x, 2) + pow(currentCircle.center.y - y, 2));
 
-                    float dist = distance(object_pos, currentCircle.center);
-
-                    if (dist < currentCircle.radius && shape.use_fill)
+                    // Stroke
+                    
+                    if (currentShape.use_stroke)
                     {
-                        is_inside_fill = true;
-                    }
-
-                    if (dist >= currentCircle.radius - shape.stroke_width / 2.0 && dist <= currentCircle.radius + shape.stroke_width / 2.0 && shape.use_stroke)
-                    {
-                        is_inside_stroke = true;
-                    }
-                }
-
-                // Polyline detection
-                else if (shape.type == 1)
-                {
-                    Polyline currentPolyline = polylines[shape.index];
-
-                    int num_points = currentPolyline.pts_end - currentPolyline.pts_begin;
-                    int num_segments;
-
-                    if (currentPolyline.closed)
-                    {
-                        num_segments = num_points;
-                    }
-                    else
-                    {
-                        num_segments = num_points - 1;
-                    }
-
-                    int intersections = 0;
-
-                    if (num_points > 0)
-                    {
-                        for (int j = 0; j < num_segments; j++)
+                        
+                        if (distance < currentCircle.radius + currentShape.stroke_width / 2 && distance > currentCircle.radius - currentShape.stroke_width / 2)
                         {
-                            float2 p0 = points[currentPolyline.pts_begin + j];
-                            float2 p1 = points[currentPolyline.pts_begin + ((j + 1) % num_points)];
+                            is_inside_stroke = true;                            
+                        }
+                    }
 
-                            // Find closest point on segment
-                            float2 segment = p1 - p0;
-                            float2 to_sample = object_pos - p0;
-
-                            float numerator = dot(to_sample, segment);
-                            float denominator = dot(segment, segment);
-
-                            float dist_to_segment;
-
-                            if (denominator > 0.0)
-                            {
-                                float t = numerator / denominator;
-                                t = clamp(t, 0.0, 1.0);
-
-                                float2 closest_point = p0 + t * segment;
-
-                                dist_to_segment = distance(object_pos, closest_point);
-                            }
-                            else
-                            {
-                                dist_to_segment = distance(object_pos, p0);
-                            }
-
-                            // Detect stroke coverage
-                            if (shape.use_stroke && dist_to_segment <= shape.stroke_width / 2.0)
-                            {
-                                is_inside_stroke = true;
-                            }
-
-                            // Ray casting for polygon fill
-                            if (currentPolyline.closed && shape.use_fill)
-                            {
-                                if ((object_pos.y >= p0.y && object_pos.y < p1.y) || (object_pos.y >= p1.y && object_pos.y < p0.y))
-                                {
-                                    float t = (object_pos.y - p0.y) / (p1.y - p0.y);
-                                    float x_intersection = p0.x + t * (p1.x - p0.x);
-
-                                    if (x_intersection > object_pos.x)
-                                    {
-                                        intersections++;
-                                    }
-                                }
-                            }
+                    // Fill
+                    if (currentShape.use_fill && !is_inside_stroke)
+                    {
+                        if (distance < currentCircle.radius)
+                        {
+                            is_inside_fill = true;
                         }
                     }
                 }
+                else if (currentShape.type == ShapeType::Polyline)
+                {
+                    Polyline currentPolyline = polylines[currentShape.index];
+                    int pts_begin = currentPolyline.pts_begin;
+                    int pts_end = currentPolyline.pts_end;
+
+
+                    is_inside = print_polyline(tid,
+                                                float2(x, y),
+                                                points,
+                                                pts_begin,
+                                                height,
+                                                width,
+                                                pts_end - pts_begin,
+                                                currentPolyline.closed,
+                                                currentShape.use_fill,
+                                                currentShape.fill_rgba.rgb,
+                                                currentShape.use_stroke,
+                                                currentShape.stroke_rgba.rgb,
+                                                currentShape.stroke_width,
+                                                image);
+
+                    is_inside_fill = is_inside.x;
+                    is_inside_stroke = is_inside.y;
+                }
+                
 
                 // Stroke alpha blending
                 if (is_inside_stroke)
                 {
-                    color += remaining * shape.stroke_rgba.a * shape.stroke_rgba.rgb;
-                    remaining *= 1.0 - shape.stroke_rgba.a;
+                    color += remaining * stroke_rgba.a * stroke_rgba.rgb;
+                    remaining *= 1.0 - stroke_rgba.a;
                 }
 
                 // Fill alpha blending
                 if (is_inside_fill)
                 {
-                    color += remaining * shape.fill_rgba.a * shape.fill_rgba.rgb;
-                    remaining *= 1.0 - shape.fill_rgba.a;
+                    color += remaining * fill_rgba.a * fill_rgba.rgb;
+                    remaining *= 1.0 - fill_rgba.a;
                 }
+                
 
                 if (remaining <= 0.0)
                 {
@@ -169,11 +237,9 @@ void compute_main(uint2 tid : SV_DispatchThreadID,
         }
     }
 
-    // Average subpixel colors
     int num_subpixels = samples_per_axis * samples_per_axis;
-    float3 final_color = rgb_sum / num_subpixels;
+    image[tid] = float4(rgb_sum / num_subpixels, 1.0);
+    
 
-    // Write final pixel
-    image[tid] = float4(final_color, 1.0);
 
 }
