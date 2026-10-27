@@ -187,8 +187,63 @@ def compose_transformations(transformations):
     F = np.eye(4, dtype=np.float32)
 
     for transform in transformations:
-        pass
-        # HW 2.3 TODO: your code here
+        matrix = np.eye(4, dtype=np.float32)
+
+        if "scale" in transform:
+            values = transform["scale"]
+            matrix = np.array([[values[0],        0 ,        0 , 0],
+                               [       0 , values[1],        0 , 0],
+                               [       0 ,        0 , values[2], 0],
+                               [       0 ,        0 ,        0 , 1]])
+ 
+        elif "translate" in transform:
+            values = transform["translate"]
+            matrix = np.array([[       1 ,        0 ,        0 , values[0]],
+                               [       0 ,        1 ,        0 , values[1]],
+                               [       0 ,        0 ,        1 , values[2]],
+                               [       0 ,        0 ,        0 ,        1 ]])
+
+        elif "rotate_x" in transform:
+            values = transform["rotate_x"]
+            theta = np.radians(values[0])
+            matrix = np.array([[       1 ,             0 ,              0 ,        0 ],
+                               [       0 , np.cos(theta) , -np.sin(theta) ,        0 ],
+                               [       0 , np.sin(theta) ,  np.cos(theta) ,        0 ],
+                               [       0 ,             0 ,              0 ,        1 ]])
+
+        elif "rotate_y" in transform:
+            values = transform["rotate_y"]
+            theta = np.radians(values[0])
+            matrix = np.array([[  np.cos(theta) ,         0 , np.sin(theta) ,        0 ],
+                               [              0 ,         1 ,             0 ,        0 ],
+                               [ -np.sin(theta) ,         0 , np.cos(theta) ,        0 ],
+                               [              0 ,         0 ,             0 ,        1 ]])
+
+        elif "rotate_z" in transform:
+            values = transform["rotate_z"]
+            theta = np.radians(values[0])
+            matrix = np.array([[  np.cos(theta) , -np.sin(theta) ,             0 ,        0 ],
+                               [  np.sin(theta) ,  np.cos(theta) ,             0 ,        0 ],
+                               [              0 ,              0 ,             1 ,        0 ],
+                               [              0 ,              0 ,             0 ,        1 ]])
+
+        elif "lookat" in transform:
+            values = transform["lookat"]
+            p = np.array(values["position"])
+            t = np.array(values["target"])
+            u = np.array(values["up"])
+
+            d = (t-p) / np.linalg.norm(t-p)
+            r = np.cross(d, u) / np.linalg.norm(np.cross(d, u))
+            u_prime = np.cross(r, d)
+
+            matrix = np.array([[r[0], u_prime[0], -d[0], p[0]],
+                               [r[1], u_prime[1], -d[1], p[1]],
+                               [r[2], u_prime[2], -d[2], p[2]],
+                               [  0 ,         0 ,    0 ,   1 ]])
+        
+        F = matrix @ F
+        
 
     return F
 
