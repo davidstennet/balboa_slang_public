@@ -1,0 +1,160 @@
+{
+    "background": [0.01, 0.01, 0.03],
+    "max_depth": 2,
+    "duration": 17.0,
+    "camera": {
+        "fov_x": 58.0,
+        "transform": [
+            {
+                "lookat": {
+                    "position": [0.0, 350.0, 646.0],
+                    "target": [0.0, 0.0, 40.0],
+                    "up": [0.0, 1.0, 0.0]
+                }
+            }
+        ]
+    },
+    "meshes": [],
+    "objects": [
+        { "type": "sphere", "name": "Sun", "center": [0,0,0], "radius": 28.0, "Kd": [1.0, 0.85, 0.4], "Kr": [0,0,0],
+          "transform_keyframes": [
+            { "time": 0.0,   "transform": [ { "scale": [1,1,1] },          { "rotate_y": [0] } ] },
+            { "time": 10.0,  "transform": [ { "scale": [1,1,1] },          { "rotate_y": [30] } ] },
+            { "time": 12.99, "transform": [ { "scale": [0.35,0.35,0.35] }, { "rotate_y": [39] } ] },
+            { "time": 13.0,  "transform": [ { "scale": [0.01,0.01,0.01] }, { "rotate_y": [39] } ] },
+            { "time": 17.0,  "transform": [ { "scale": [0.01,0.01,0.01] }, { "rotate_y": [39] } ] } ] },
+
+        { "type": "sphere", "name": "Blue Core", "center": [0,0,0], "radius": 1.0, "Kd": [0.015, 0.07, 0.45], "Kr": [0,0,0],
+          "transform_keyframes": [
+            { "time": 0.0,   "transform": [ { "scale": [0.01,0.01,0.01] } ] },
+            { "time": 12.99, "transform": [ { "scale": [0.01,0.01,0.01] } ] },
+            { "time": 13.0,  "transform": [ { "scale": [9.8,9.8,9.8] } ] },
+            { "time": 14.5,  "transform": [ { "scale": [33,33,33] } ] },
+            { "time": 17.0,  "transform": [ { "scale": [33,33,33] } ] } ] },
+
+        { "type": "sphere", "name": "Blast Flash", "center": [0,0,0], "radius": 1.0, "Kd": [0.015, 0.07, 0.45], "Kr": [0,0,0],
+          "transform_keyframes": [
+            { "time": 0.0,   "transform": [ { "scale": [0.01,0.01,0.01] }, { "translate": [0,290,542.1] } ] },
+            { "time": 14.3,  "transform": [ { "scale": [0.01,0.01,0.01] }, { "translate": [0,290,542.1] } ] },
+            { "time": 15.3,  "transform": [ { "scale": [45,45,45] },       { "translate": [0,290,542.1] } ] },
+            { "time": 16.0,  "transform": [ { "scale": [100,100,100] },    { "translate": [0,290,542.1] } ] },
+            { "time": 17.0,  "transform": [ { "scale": [100,100,100] },    { "translate": [0,290,542.1] } ] } ] },
+
+        { "type": "sphere", "name": "Ash Twin", "center": [0,0,0], "radius": 4.0, "Kd": [0.85, 0.7, 0.45], "Kr": [0,0,0],
+          "transform_keyframes": [
+            { "time": 0.0,   "transform": [ { "translate": [8,0,0] }, { "rotate_y": [0] },    { "translate": [90,0,0] }, { "rotate_y": [0] } ] },
+            { "time": 120.0, "transform": [ { "translate": [8,0,0] }, { "rotate_y": [1440] }, { "translate": [90,0,0] }, { "rotate_y": [1080] } ] } ] },
+
+        { "type": "sphere", "name": "Ember Twin", "center": [0,0,0], "radius": 4.0, "Kd": [0.75, 0.42, 0.22], "Kr": [0,0,0],
+          "transform_keyframes": [
+            { "time": 0.0,   "transform": [ { "translate": [-8,0,0] }, { "rotate_y": [0] },    { "translate": [90,0,0] }, { "rotate_y": [0] } ] },
+            { "time": 120.0, "transform": [ { "translate": [-8,0,0] }, { "rotate_y": [1440] }, { "translate": [90,0,0] }, { "rotate_y": [1080] } ] } ] },
+
+        { "type": "sphere", "name": "Timber Hearth", "center": [0,0,0], "radius": 5.0, "Kd": [0.3, 0.55, 0.35], "Kr": [0,0,0],
+          "transform_keyframes": [
+            { "time": 0.0,   "transform": [ { "translate": [135,0,0] }, { "rotate_y": [70] } ] },
+            { "time": 120.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [790] } ] } ] },
+
+        { "type": "sphere", "name": "Attlerock", "center": [0,0,0], "radius": 2.0, "Kd": [0.55, 0.5, 0.45], "Kr": [0,0,0],
+          "transform_keyframes": [
+            { "time": 0.0,   "transform": [ { "translate": [11,0,0] }, { "rotate_y": [0] },    { "translate": [135,0,0] }, { "rotate_y": [70] } ] },
+            { "time": 120.0, "transform": [ { "translate": [11,0,0] }, { "rotate_y": [1440] }, { "translate": [135,0,0] }, { "rotate_y": [790] } ] } ] },
+
+        { "type": "sphere", "name": "Brittle Hollow", "center": [0,0,0], "radius": 5.0, "Kd": [0.35, 0.3, 0.42], "Kr": [0,0,0],
+          "transform_keyframes": [
+            { "time": 0.0,   "transform": [ { "translate": [180,0,0] }, { "rotate_y": [140] } ] },
+            { "time": 120.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [500] } ] } ] },
+
+        { "type": "sphere", "name": "Hollow's Lantern", "center": [0,0,0], "radius": 2.0, "Kd": [0.9, 0.35, 0.1], "Kr": [0,0,0],
+          "transform_keyframes": [
+            { "time": 0.0,   "transform": [ { "translate": [11,0,0] }, { "rotate_y": [0] },    { "translate": [180,0,0] }, { "rotate_y": [140] } ] },
+            { "time": 120.0, "transform": [ { "translate": [11,0,0] }, { "rotate_y": [1800] }, { "translate": [180,0,0] }, { "rotate_y": [500] } ] } ] },
+
+        { "type": "sphere", "name": "Giant's Deep", "center": [0,0,0], "radius": 9.0, "Kd": [0.15, 0.5, 0.4], "Kr": [0.1, 0.1, 0.1],
+          "transform_keyframes": [
+            { "time": 0.0,   "transform": [ { "translate": [230,0,0] }, { "rotate_y": [210] } ] },
+            { "time": 120.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [570] } ] } ] },
+
+        { "type": "sphere", "name": "Quantum Moon", "center": [0,0,0], "radius": 2.0, "Kd": [0.5, 0.45, 0.4], "Kr": [0,0,0],
+          "transform_keyframes": [
+            { "time": 0.0,   "transform": [ { "translate": [16,0,0] }, { "rotate_y": [0] },    { "translate": [230,0,0] }, { "rotate_y": [210] } ] },
+            { "time": 120.0, "transform": [ { "translate": [16,0,0] }, { "rotate_y": [1080] }, { "translate": [230,0,0] }, { "rotate_y": [570] } ] } ] },
+
+        { "type": "sphere", "name": "Dark Bramble", "center": [0,0,0], "radius": 6.0, "Kd": [0.2, 0.4, 0.25], "Kr": [0,0,0],
+          "transform_keyframes": [
+            { "time": 0.0,   "transform": [ { "translate": [285,0,0] }, { "rotate_y": [300] } ] },
+            { "time": 120.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [-60] } ] } ] },
+
+        { "type": "sphere", "name": "The Interloper", "center": [0,0,0], "radius": 3.0, "Kd": [0.7, 0.8, 0.9], "Kr": [0,0,0],
+          "transform_keyframes": [
+            { "time": 0.0,   "transform": [ { "translate": [160,0,0] }, { "rotate_y": [0] },   { "translate": [-130,50,0] } ] },
+            { "time": 120.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [360] }, { "translate": [-130,50,0] } ] } ] },
+
+        { "type": "sphere", "name": "Twins trail 1", "center": [0,0,0], "radius": 1.6,  "Kd": [0.9,0.75,0.4], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [-8.9] } ] },  { "time": 120.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [1071.1] } ] } ] },
+        { "type": "sphere", "name": "Twins trail 2", "center": [0,0,0], "radius": 1.45, "Kd": [0.9,0.75,0.4], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [-17.8] } ] }, { "time": 120.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [1062.2] } ] } ] },
+        { "type": "sphere", "name": "Twins trail 3", "center": [0,0,0], "radius": 1.3,  "Kd": [0.9,0.75,0.4], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [-26.7] } ] }, { "time": 120.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [1053.3] } ] } ] },
+        { "type": "sphere", "name": "Twins trail 4", "center": [0,0,0], "radius": 1.15, "Kd": [0.9,0.75,0.4], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [-35.6] } ] }, { "time": 120.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [1044.4] } ] } ] },
+        { "type": "sphere", "name": "Twins trail 5", "center": [0,0,0], "radius": 1.0,  "Kd": [0.9,0.75,0.4], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [-44.5] } ] }, { "time": 120.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [1035.5] } ] } ] },
+        { "type": "sphere", "name": "Twins trail 6", "center": [0,0,0], "radius": 0.9,  "Kd": [0.9,0.75,0.4], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [-53.4] } ] }, { "time": 120.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [1026.6] } ] } ] },
+        { "type": "sphere", "name": "Twins trail 7", "center": [0,0,0], "radius": 0.8,  "Kd": [0.9,0.75,0.4], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [-62.3] } ] }, { "time": 120.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [1017.7] } ] } ] },
+        { "type": "sphere", "name": "Twins trail 8", "center": [0,0,0], "radius": 0.7,  "Kd": [0.9,0.75,0.4], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [-71.2] } ] }, { "time": 120.0, "transform": [ { "translate": [90,0,0] }, { "rotate_y": [1008.8] } ] } ] },
+
+        { "type": "sphere", "name": "Timber trail 1", "center": [0,0,0], "radius": 1.6,  "Kd": [0.4,0.9,0.5], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [63.2] } ] }, { "time": 120.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [783.2] } ] } ] },
+        { "type": "sphere", "name": "Timber trail 2", "center": [0,0,0], "radius": 1.45, "Kd": [0.4,0.9,0.5], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [56.4] } ] }, { "time": 120.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [776.4] } ] } ] },
+        { "type": "sphere", "name": "Timber trail 3", "center": [0,0,0], "radius": 1.3,  "Kd": [0.4,0.9,0.5], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [49.6] } ] }, { "time": 120.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [769.6] } ] } ] },
+        { "type": "sphere", "name": "Timber trail 4", "center": [0,0,0], "radius": 1.15, "Kd": [0.4,0.9,0.5], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [42.8] } ] }, { "time": 120.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [762.8] } ] } ] },
+        { "type": "sphere", "name": "Timber trail 5", "center": [0,0,0], "radius": 1.0,  "Kd": [0.4,0.9,0.5], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [36.0] } ] }, { "time": 120.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [756.0] } ] } ] },
+        { "type": "sphere", "name": "Timber trail 6", "center": [0,0,0], "radius": 0.9,  "Kd": [0.4,0.9,0.5], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [29.2] } ] }, { "time": 120.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [749.2] } ] } ] },
+        { "type": "sphere", "name": "Timber trail 7", "center": [0,0,0], "radius": 0.8,  "Kd": [0.4,0.9,0.5], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [22.4] } ] }, { "time": 120.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [742.4] } ] } ] },
+        { "type": "sphere", "name": "Timber trail 8", "center": [0,0,0], "radius": 0.7,  "Kd": [0.4,0.9,0.5], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [15.6] } ] }, { "time": 120.0, "transform": [ { "translate": [135,0,0] }, { "rotate_y": [735.6] } ] } ] },
+
+        { "type": "sphere", "name": "Brittle trail 1", "center": [0,0,0], "radius": 1.6,  "Kd": [0.6,0.5,0.85], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [134.9] } ] }, { "time": 120.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [494.9] } ] } ] },
+        { "type": "sphere", "name": "Brittle trail 2", "center": [0,0,0], "radius": 1.45, "Kd": [0.6,0.5,0.85], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [129.8] } ] }, { "time": 120.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [489.8] } ] } ] },
+        { "type": "sphere", "name": "Brittle trail 3", "center": [0,0,0], "radius": 1.3,  "Kd": [0.6,0.5,0.85], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [124.7] } ] }, { "time": 120.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [484.7] } ] } ] },
+        { "type": "sphere", "name": "Brittle trail 4", "center": [0,0,0], "radius": 1.15, "Kd": [0.6,0.5,0.85], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [119.6] } ] }, { "time": 120.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [479.6] } ] } ] },
+        { "type": "sphere", "name": "Brittle trail 5", "center": [0,0,0], "radius": 1.0,  "Kd": [0.6,0.5,0.85], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [114.5] } ] }, { "time": 120.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [474.5] } ] } ] },
+        { "type": "sphere", "name": "Brittle trail 6", "center": [0,0,0], "radius": 0.9,  "Kd": [0.6,0.5,0.85], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [109.4] } ] }, { "time": 120.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [469.4] } ] } ] },
+        { "type": "sphere", "name": "Brittle trail 7", "center": [0,0,0], "radius": 0.8,  "Kd": [0.6,0.5,0.85], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [104.3] } ] }, { "time": 120.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [464.3] } ] } ] },
+        { "type": "sphere", "name": "Brittle trail 8", "center": [0,0,0], "radius": 0.7,  "Kd": [0.6,0.5,0.85], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [99.2] } ] },  { "time": 120.0, "transform": [ { "translate": [180,0,0] }, { "rotate_y": [459.2] } ] } ] },
+
+        { "type": "sphere", "name": "Giant trail 1", "center": [0,0,0], "radius": 1.6,  "Kd": [0.3,0.85,0.75], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [204.5] } ] }, { "time": 120.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [564.5] } ] } ] },
+        { "type": "sphere", "name": "Giant trail 2", "center": [0,0,0], "radius": 1.45, "Kd": [0.3,0.85,0.75], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [199.0] } ] }, { "time": 120.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [559.0] } ] } ] },
+        { "type": "sphere", "name": "Giant trail 3", "center": [0,0,0], "radius": 1.3,  "Kd": [0.3,0.85,0.75], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [193.5] } ] }, { "time": 120.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [553.5] } ] } ] },
+        { "type": "sphere", "name": "Giant trail 4", "center": [0,0,0], "radius": 1.15, "Kd": [0.3,0.85,0.75], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [188.0] } ] }, { "time": 120.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [548.0] } ] } ] },
+        { "type": "sphere", "name": "Giant trail 5", "center": [0,0,0], "radius": 1.0,  "Kd": [0.3,0.85,0.75], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [182.5] } ] }, { "time": 120.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [542.5] } ] } ] },
+        { "type": "sphere", "name": "Giant trail 6", "center": [0,0,0], "radius": 0.9,  "Kd": [0.3,0.85,0.75], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [177.0] } ] }, { "time": 120.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [537.0] } ] } ] },
+        { "type": "sphere", "name": "Giant trail 7", "center": [0,0,0], "radius": 0.8,  "Kd": [0.3,0.85,0.75], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [171.5] } ] }, { "time": 120.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [531.5] } ] } ] },
+        { "type": "sphere", "name": "Giant trail 8", "center": [0,0,0], "radius": 0.7,  "Kd": [0.3,0.85,0.75], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [166.0] } ] }, { "time": 120.0, "transform": [ { "translate": [230,0,0] }, { "rotate_y": [526.0] } ] } ] },
+
+        { "type": "sphere", "name": "Bramble trail 1", "center": [0,0,0], "radius": 1.6,  "Kd": [0.45,0.7,0.45], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [302.8] } ] }, { "time": 120.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [-57.2] } ] } ] },
+        { "type": "sphere", "name": "Bramble trail 2", "center": [0,0,0], "radius": 1.45, "Kd": [0.45,0.7,0.45], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [305.6] } ] }, { "time": 120.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [-54.4] } ] } ] },
+        { "type": "sphere", "name": "Bramble trail 3", "center": [0,0,0], "radius": 1.3,  "Kd": [0.45,0.7,0.45], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [308.4] } ] }, { "time": 120.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [-51.6] } ] } ] },
+        { "type": "sphere", "name": "Bramble trail 4", "center": [0,0,0], "radius": 1.15, "Kd": [0.45,0.7,0.45], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [311.2] } ] }, { "time": 120.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [-48.8] } ] } ] },
+        { "type": "sphere", "name": "Bramble trail 5", "center": [0,0,0], "radius": 1.0,  "Kd": [0.45,0.7,0.45], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [314.0] } ] }, { "time": 120.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [-46.0] } ] } ] },
+        { "type": "sphere", "name": "Bramble trail 6", "center": [0,0,0], "radius": 0.9,  "Kd": [0.45,0.7,0.45], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [316.8] } ] }, { "time": 120.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [-43.2] } ] } ] },
+        { "type": "sphere", "name": "Bramble trail 7", "center": [0,0,0], "radius": 0.8,  "Kd": [0.45,0.7,0.45], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [319.6] } ] }, { "time": 120.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [-40.4] } ] } ] },
+        { "type": "sphere", "name": "Bramble trail 8", "center": [0,0,0], "radius": 0.7,  "Kd": [0.45,0.7,0.45], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [322.4] } ] }, { "time": 120.0, "transform": [ { "translate": [285,0,0] }, { "rotate_y": [-37.6] } ] } ] },
+
+        { "type": "sphere", "name": "Interloper trail 1", "center": [0,0,0], "radius": 1.6,  "Kd": [0.8,0.9,1.0], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [-5] },  { "translate": [-130,50,0] } ] }, { "time": 120.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [355] }, { "translate": [-130,50,0] } ] } ] },
+        { "type": "sphere", "name": "Interloper trail 2", "center": [0,0,0], "radius": 1.45, "Kd": [0.8,0.9,1.0], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [-10] }, { "translate": [-130,50,0] } ] }, { "time": 120.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [350] }, { "translate": [-130,50,0] } ] } ] },
+        { "type": "sphere", "name": "Interloper trail 3", "center": [0,0,0], "radius": 1.3,  "Kd": [0.8,0.9,1.0], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [-15] }, { "translate": [-130,50,0] } ] }, { "time": 120.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [345] }, { "translate": [-130,50,0] } ] } ] },
+        { "type": "sphere", "name": "Interloper trail 4", "center": [0,0,0], "radius": 1.15, "Kd": [0.8,0.9,1.0], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [-20] }, { "translate": [-130,50,0] } ] }, { "time": 120.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [340] }, { "translate": [-130,50,0] } ] } ] },
+        { "type": "sphere", "name": "Interloper trail 5", "center": [0,0,0], "radius": 1.0,  "Kd": [0.8,0.9,1.0], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [-25] }, { "translate": [-130,50,0] } ] }, { "time": 120.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [335] }, { "translate": [-130,50,0] } ] } ] },
+        { "type": "sphere", "name": "Interloper trail 6", "center": [0,0,0], "radius": 0.9,  "Kd": [0.8,0.9,1.0], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [-30] }, { "translate": [-130,50,0] } ] }, { "time": 120.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [330] }, { "translate": [-130,50,0] } ] } ] },
+        { "type": "sphere", "name": "Interloper trail 7", "center": [0,0,0], "radius": 0.8,  "Kd": [0.8,0.9,1.0], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [-35] }, { "translate": [-130,50,0] } ] }, { "time": 120.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [325] }, { "translate": [-130,50,0] } ] } ] },
+        { "type": "sphere", "name": "Interloper trail 8", "center": [0,0,0], "radius": 0.7,  "Kd": [0.8,0.9,1.0], "Kr": [0,0,0], "transform_keyframes": [ { "time": 0.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [-40] }, { "translate": [-130,50,0] } ] }, { "time": 120.0, "transform": [ { "translate": [160,0,0] }, { "rotate_y": [320] }, { "translate": [-130,50,0] } ] } ] }
+    ],
+    "lights": [
+        { "position": [36.0, 0.0, 0.0],       "intensity": [3000.0, 2600.0, 1900.0] },
+        { "position": [25.456, 0.0, 25.456],  "intensity": [3000.0, 2600.0, 1900.0] },
+        { "position": [0.0, 0.0, 36.0],       "intensity": [3000.0, 2600.0, 1900.0] },
+        { "position": [-25.456, 0.0, 25.456], "intensity": [3000.0, 2600.0, 1900.0] },
+        { "position": [-36.0, 0.0, 0.0],      "intensity": [3000.0, 2600.0, 1900.0] },
+        { "position": [-25.456, 0.0, -25.456],"intensity": [3000.0, 2600.0, 1900.0] },
+        { "position": [0.0, 0.0, -36.0],      "intensity": [3000.0, 2600.0, 1900.0] },
+        { "position": [25.456, 0.0, -25.456], "intensity": [3000.0, 2600.0, 1900.0] },
+        { "position": [0.0, 36.0, 0.0],       "intensity": [3000.0, 2600.0, 1900.0] },
+        { "position": [0.0, -36.0, 0.0],      "intensity": [3000.0, 2600.0, 1900.0] },
+        { "position": [0.0, 350.0, 646.0],    "intensity": [6000.0, 6000.0, 6000.0] }
+    ]
+}

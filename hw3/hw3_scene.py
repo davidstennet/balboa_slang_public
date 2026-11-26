@@ -43,17 +43,122 @@ def compose_transformations(transformations):
     """
         Given a list of transformations, compose them into a matrix.
     """
-    # HW 3.4: copy paste your HW2.3 code here
-
     F = np.eye(4, dtype=np.float32)
+
+    for transform in transformations:
+        matrix = np.eye(4, dtype=np.float32)
+
+        if "scale" in transform:
+            values = transform["scale"]
+            matrix = np.array([[values[0],        0 ,        0 , 0],
+                                [       0 , values[1],        0 , 0],
+                                [       0 ,        0 , values[2], 0],
+                                [       0 ,        0 ,        0 , 1]])
+    
+        elif "translate" in transform:
+            values = transform["translate"]
+            matrix = np.array([[       1 ,        0 ,        0 , values[0]],
+                                [       0 ,        1 ,        0 , values[1]],
+                                [       0 ,        0 ,        1 , values[2]],
+                                [       0 ,        0 ,        0 ,        1 ]])
+
+        elif "rotate_x" in transform:
+            values = transform["rotate_x"]
+            theta = np.radians(values[0])
+            matrix = np.array([[       1 ,             0 ,              0 ,        0 ],
+                                [       0 , np.cos(theta) , -np.sin(theta) ,        0 ],
+                                [       0 , np.sin(theta) ,  np.cos(theta) ,        0 ],
+                                [       0 ,             0 ,              0 ,        1 ]])
+
+        elif "rotate_y" in transform:
+            values = transform["rotate_y"]
+            theta = np.radians(values[0])
+            matrix = np.array([[  np.cos(theta) ,         0 , np.sin(theta) ,        0 ],
+                                [              0 ,         1 ,             0 ,        0 ],
+                                [ -np.sin(theta) ,         0 , np.cos(theta) ,        0 ],
+                                [              0 ,         0 ,             0 ,        1 ]])
+
+        elif "rotate_z" in transform:
+            values = transform["rotate_z"]
+            theta = np.radians(values[0])
+            matrix = np.array([[  np.cos(theta) , -np.sin(theta) ,             0 ,        0 ],
+                                [  np.sin(theta) ,  np.cos(theta) ,             0 ,        0 ],
+                                [              0 ,              0 ,             1 ,        0 ],
+                                [              0 ,              0 ,             0 ,        1 ]])
+
+        elif "lookat" in transform:
+            values = transform["lookat"]
+            p = np.array(values["position"])
+            t = np.array(values["target"])
+            u = np.array(values["up"])
+
+            d = (t-p) / np.linalg.norm(t-p)
+            r = np.cross(d, u) / np.linalg.norm(np.cross(d, u))
+            u_prime = np.cross(r, d)
+
+            matrix = np.array([[r[0], u_prime[0], -d[0], p[0]],
+                                [r[1], u_prime[1], -d[1], p[1]],
+                                [r[2], u_prime[2], -d[2], p[2]],
+                                [  0 ,         0 ,    0 ,   1 ]])
+        
+        F = matrix @ F
+        
+
     return F
 
 def interpolate_transformation(transform_keyframes, t):
-    # HW 3.4: copy your HW2.4 code here.
+    # Find the two keyframes surrounding t and linearly
+    # interpolate the corresponding transformation parameters.
+    #
+    # Return a list of transformations in the same format
+    # as the "transform" field in the scene JSON.
+    if t <= transform_keyframes[0]["time"]:
+            return transform_keyframes[0]["transform"]
+    
+    if t >= transform_keyframes[-1]["time"]:
+        return transform_keyframes[-1]["transform"]
+        
+    for i in range(len(transform_keyframes) - 1):
+        t0 = transform_keyframes[i]["time"]
+        t1 = transform_keyframes[i + 1]["time"]
+    
+        if t >= t0 and t <= t1:
+            w = (t - t0)/(t1 - t0)
+    
+            keyframe0 = transform_keyframes[i]["transform"]
+            keyframe1 = transform_keyframes[i + 1]["transform"]
+    
+            interpolated_transforms = []
+    
+            for j in range(len(keyframe0)):
+                transform0 = keyframe0[j]
+                transform1 = keyframe1[j]
+    
+                transform_type = next(iter(transform0))
+    
+                values0 = transform0[transform_type]
+                values1 = transform1[transform_type]
 
-    # create a new transform from the two keyframes
-    interp_transforms = []
-    return interp_transforms
+                if transform_type == "lookat":
+                    interpolated_values = {}
+
+                    for key in values0:
+                        v0 = np.array(values0[key])
+                        v1 = np.array(values1[key])
+
+                        interpolated_values[key] = ( (1-w) * v0 + w * v1).tolist()
+                else:
+                    interpolated_values = []
+
+                    for k in range(len(values0)):
+                        value = (1 - w) * values0[k] + w * values1[k]
+                        interpolated_values.append(value)
+    
+                interpolated = {transform_type: interpolated_values}
+    
+                interpolated_transforms.append(interpolated)
+    
+            return interpolated_transforms
 
 def get_transformation(obj, t):
     transforms = obj.get('transform', [])

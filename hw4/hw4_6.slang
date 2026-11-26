@@ -85,5 +85,106 @@ void detect_collision(uint tid : SV_DispatchThreadID,
     if (tid >= num_particles) {
         return;
     }
-    // TODO: HW 4.6. Your code below.
+
+    // If it is infinity mass this particle does not move 
+    if (inv_masses[tid] == 0) {
+        contact_planes[tid] = float4(0, 0, 0, 0);
+        return;
+    }
+
+    float3 x = positions[tid];
+    float4 curr_contact_plane;
+    float smallest_d = 1e+20;
+
+
+    // Iterate through the planes
+    for (int i = 0; i < num_planes; i++) {
+        float3 n = planes[i].xyz;
+        float d = dot(n, x) - planes[i].w;
+        if (d >= smallest_d) 
+            continue;
+
+        smallest_d = d;
+        curr_contact_plane = planes[i];
+    }
+
+    // Iterate through the spheres
+    for (int i = 0; i < num_spheres; i++) {
+        float3 c = spheres[i].xyz;
+        float r = spheres[i].w;
+        float d = length(x - c) - r; // d = ||x-c|| - r
+        if (d >= smallest_d) 
+            continue;
+        
+
+        // Update d and plane value that would be returned
+        smallest_d = d;
+        float3 n = normalize(x - c);
+        float3 contact_p = c + r * n;
+        curr_contact_plane = float4(n.x, n.y, n.z, dot(n, contact_p));
+    }
+    
+
+    // Iterate through triangles with their BVH
+    int node_index = 0;
+    float closest_unsigned_d = 1e+20;
+    float selected_signed_d = 1e+20;
+    while (node_index >= 0 && node_index < num_bvh_nodes) {
+
+        BVHNode node = bvh_nodes[node_index];
+
+        float in_bounding_box = point_aabb_distance(x, node.bbox_min, node.bbox_max);
+        if (in_bounding_box > contact_margin + collision_distance) {
+            node_index = node.next_index;
+        }
+        else if (node.is_leaf) {
+            for (int i = node.triangle_begin; i < node.triangle_end; i++) {
+                uint3 triangle = mesh_triangles[i];
+                float3 v0 = mesh_vertices[triangle.x];
+                float3 v1 = mesh_vertices[triangle.y];
+                float3 v2 = mesh_vertices[triangle.z];
+
+                ClosestPoint cp = closest_point_triangle(x, v0, v1, v2);
+
+                float unsigned_d = distance(x, cp.position);
+                if (unsigned_d < contact_margin + collision_distance) {
+                    // Get normals
+                    float3 n0 = mesh_vertex_normals[triangle.x];
+                    float3 n1 = mesh_vertex_normals[triangle.y];
+                    float3 n2 = mesh_vertex_normals[triangle.z];
+
+                    float3 ng = normalize(cross(v1 - v0, v2 - v0));
+                    float3 ns = normalize(cp.bary.x * n0 + cp.bary.y * n1 + cp.bary.z * n2);
+                    if (dot(ng, ns) < 0.0)
+                        ng = -ng;
+
+                    float signed_d = dot(x - cp.position, ng);
+                    if (unsigned_d < closest_unsigned_d) {
+                        closest_unsigned_d = unsigned_d;
+                        selected_signed_d = signed_d;
+
+                        curr_contact_plane = float4(ng.x, ng.y, ng.z, dot(ng, cp.position));
+                    }
+                }
+            }
+
+            node_index++;
+        }
+        else {
+            node_index++;
+        }
+
+    }
+    // Checks to see if we are using the triangle as the shape
+    if (closest_unsigned_d < contact_margin + collision_distance && selected_signed_d < smallest_d) {
+        smallest_d = selected_signed_d;
+    }
+
+
+    if (smallest_d < contact_margin + collision_distance) {
+        contact_planes[tid] = float4(curr_contact_plane.xyz, curr_contact_plane.w + collision_distance);
+    }
+    else {
+        contact_planes[tid] = float4(0, 0, 0, 0);
+    }
 }

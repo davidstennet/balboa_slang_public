@@ -326,7 +326,6 @@ def hw2_3(args):
         image.save_png(args.output, color_image.to_numpy())
 
 def interpolate_transformation(transform_keyframes, t):
-    # HW 2.4: implement this
     # Find the two keyframes surrounding t and linearly
     # interpolate the corresponding transformation parameters.
     #

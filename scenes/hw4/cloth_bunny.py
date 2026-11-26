@@ -8,7 +8,7 @@ from scenes.hw4.geometry import make_cloth_grid, make_cloth_constraints
 
 def make_scene():
     mesh = trimesh.load_mesh(
-        Path(__file__).with_name('bunny.ply'),
+        Path(__file__).with_name('cloth_bunny.ply'),
         process=False)
 
     vertices = np.asarray(

@@ -9,5 +9,22 @@ void compute_main(uint tid : SV_DispatchThreadID,
     if (tid >= num_particles) {
         return;
     }
-    // TODO: HW 4.1. Your code below.
+
+    // Initial condition variables
+    float3 grav_accel = float3(0, -9.8, 0);
+    float3 posit = positions[tid];
+    float3 veloc = velocities[tid];
+
+    // Computing symplectic Euler
+    float3 next_veloc = veloc + dt * grav_accel;
+    float3 next_posit = posit + dt * next_veloc;
+    if (next_posit.y <= -0.97) {
+        next_posit.y = -0.97;
+        next_veloc.y = -next_veloc.y;
+    }
+
+    // Update the position and velocities with final value
+    positions[tid] = next_posit;
+    velocities[tid] = next_veloc;
 }
+
